@@ -91,9 +91,8 @@ function TasksContent() {
           return a.category.localeCompare(b.category);
         case "newest":
         default:
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
+          // No createdAt on mock tasks; keep original order
+          return 0;
       }
     });
 

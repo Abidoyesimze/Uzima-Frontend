@@ -15,20 +15,21 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        )
-      })}
+      {(toasts as any[]).map((t: any) => (
+        <Toast
+          key={t.id}
+          open={t.open}
+          onOpenChange={t.onOpenChange}
+          variant={t.variant as any}
+        >
+          <div className="grid gap-1">
+            {t.title && <ToastTitle>{t.title}</ToastTitle>}
+            {t.description && <ToastDescription>{t.description}</ToastDescription>}
+          </div>
+          {t.action}
+          <ToastClose />
+        </Toast>
+      ))}
       <ToastViewport />
     </ToastProvider>
   )

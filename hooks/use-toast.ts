@@ -8,11 +8,11 @@ import type { ToastActionElement, ToastProps } from '@/components/ui/toast'
 const TOAST_LIMIT = 5
 const TOAST_REMOVE_DELAY = 4000 // auto-dismiss after 4 seconds
 
-type ToastType = 'success' | 'error' | 'info' | 'reward'
+type ToastVariant = 'success' | 'error' | 'info' | 'reward'
 
-type ToasterToast = ToastProps & {
+type ToasterToast = Omit<ToastProps, 'type'> & {
   id: string
-  type: ToastType
+  variant?: ToastVariant
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
@@ -67,7 +67,7 @@ const addToRemoveQueue = (toastId: string) => {
     toastTimeouts.delete(toastId)
     dispatch({
       type: 'REMOVE_TOAST',
-      toastId: toastId,
+      toastId: toastId as any,
     })
   }, TOAST_REMOVE_DELAY)
 
@@ -140,7 +140,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>
 
-function toast({ type, ...props }: Toast) {
+function toast({ variant, ...props }: Toast) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -155,7 +155,7 @@ function toast({ type, ...props }: Toast) {
     toast: {
       ...props,
       id,
-      type,
+      variant,
       open: true,
       onOpenChange: (open) => {
         if (!open) dismiss()
